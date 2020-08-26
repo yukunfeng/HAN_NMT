@@ -1,5 +1,6 @@
 #!/bin/bash
-moses_scripts=/idiap/user/lmiculicich/Installations/mosesdecoder/scripts
+# moses_scripts=/idiap/user/lmiculicich/Installations/mosesdecoder/scripts
+moses_scripts=/home/lr/yukun/OpenNMT-py/data/mosesdecoder/
 
 zh_segment_home=/idiap/home/lmiculicich/.cache/pip/wheels/ce/32/de/c2be1db5f30804bc7f146ff698c52963f8aa11ba5049811b0d
 #kpu_preproc_dir=/fs/zisa0/bhaddow/code/preprocess/build/bin
