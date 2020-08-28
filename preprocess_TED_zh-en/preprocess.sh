@@ -24,7 +24,7 @@ $moses_scripts/tokenizer/tokenizer.perl -a -l $tgt  \
 > $output_dir/corpus.tok.$tgt
 
 #Segment the Chinese part
-python -m jieba -d ' ' < $input_dir/corpus.$src > $output_dir/corpus.tok.$src 
+python -m jieba -d ' ' < $input_dir/corpus.$src > $output_dir/corpus.tc.$src 
 
 #
 ###
@@ -37,8 +37,8 @@ python -m jieba -d ' ' < $input_dir/corpus.$src > $output_dir/corpus.tok.$src
 $moses_scripts/recaser/train-truecaser.perl -model $output_dir/truecase-model.$tgt -corpus $output_dir/corpus.tok.$tgt
 $moses_scripts/recaser/truecase.perl < $output_dir/corpus.tok.$tgt > $output_dir/corpus.tc.$tgt -model $output_dir/truecase-model.$tgt
 
-rm -f $output_dir/corpus.tc.$src
-ln -s $output_dir/corpus.tok.$src  $output_dir/corpus.tc.$src
+# rm -f $output_dir/corpus.tc.$src
+# ln -s $output_dir/corpus.tok.$src  $output_dir/corpus.tc.$src
 #
 #  
 # dev sets

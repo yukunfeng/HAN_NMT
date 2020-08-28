@@ -46,7 +46,7 @@ class HierarchicalContext(nn.Module):
 		self.layer_norm_query_word = onmt.modules.LayerNorm(size)
 		self.layer_norm_query_sent = onmt.modules.LayerNorm(size)
 		self.layer_norm_word = onmt.modules.LayerNorm(size)
- 		self.dropout = nn.Dropout(dropout)
+		self.dropout = nn.Dropout(dropout)
 		self.sent_attn = onmt.modules.MultiHeadedAttention(head_count, size, dropout=dropout)
 		self.word_attn = onmt.modules.MultiHeadedAttention(head_count, size, dropout=dropout)
 
