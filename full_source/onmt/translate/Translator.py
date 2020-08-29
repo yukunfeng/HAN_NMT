@@ -93,6 +93,7 @@ class Translator(object):
 				 translate_part="all",
 				 out_attn=None):
 		self.gpu = gpu
+		self.gpu = torch.device("cuda")
 		self.cuda = gpu > -1
 
 		self.model = model
@@ -176,7 +177,8 @@ class Translator(object):
 				if tgt_path is not None:
 					gold_score_total += trans.gold_score
 					gold_words_total += len(trans.gold_sent) + 1
-					ctx_attn.append(trans.ctx_attn)
+					#  ctx_attn.append(trans.ctx_attn)
+					ctx_attn.append(trans.attns)
 
 				n_best_preds = [" ".join(pred)
 								for pred in trans.pred_sents[:self.n_best]]
@@ -380,9 +382,10 @@ class Translator(object):
 		ret["gold_score"] = [0] * batch_size
 		ret["ctx_attn"] = None
 		if "tgt" in batch.__dict__:
+			#  ret["gold_score"] = self._run_target(batch, data, context, translate_part)
 			ret["gold_score"], ret["ctx_attn"] = self._run_target(batch, data, context, translate_part)
 		ret["batch"] = batch
-		print(ret)
+		#  print(ret)
 		return ret
 
 	def update_context(self, pred, cache, ind_cache, enc_states, src, memory_bank, src_lengths, batch_i, translate_part, pad):
@@ -496,8 +499,10 @@ class Translator(object):
 			tgt = tgt.unsqueeze(1)
 			scores = out.data.gather(1, tgt)
 			scores.masked_fill_(tgt.eq(tgt_pad), 0)
-			gold_scores += scores
-		return gold_scores
+			#  gold_scores += scores
+			gold_scores = gold_scores + scores.squeeze(dim=1)
+		#  return gold_scores
+		return gold_scores, attn_word_enc
 
 	def _report_score(self, name, score_total, words_total):
 		print("%s AVG SCORE: %.4f, %s PPL: %.4f" % (
