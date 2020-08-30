@@ -299,6 +299,7 @@ def train_model(model, fields, optim, data_type, model_opt, train_part):
 									   fields, opt,
 									   is_train=False)
 		valid_stats = trainer.validate(valid_iter, train_part)
+		print(f"Epoch: {epoch}")
 		print('Validation perplexity: %g' % valid_stats.ppl())
 		print('Validation accuracy: %g' % valid_stats.accuracy())
 
