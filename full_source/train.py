@@ -281,7 +281,8 @@ def train_model(model, fields, optim, data_type, model_opt, train_part):
 		  (opt.epochs + 1 - opt.start_epoch, opt.start_epoch))
 	print(' * batch size: %d' % opt.batch_size)
 
-	for epoch in range(opt.start_epoch, opt.epochs + 1):
+	#for epoch in range(opt.start_epoch, opt.epochs + 1):
+	for epoch in range(1, opt.epochs + 1):
 		print('')
 
 		# 1. Train for one epoch on the training set.

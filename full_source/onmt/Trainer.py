@@ -291,7 +291,7 @@ class Trainer(object):
 			'epoch': epoch,
 			'optim': self.optim,
 		}
-    torch.save(checkpoint, opt.save_model)
+		torch.save(checkpoint, opt.save_model)
 		#  torch.save(checkpoint,
 					 #  '%s_acc_%.2f_ppl_%.2f_e%d.pt'
 					 #  % (opt.save_model, valid_stats.accuracy() if valid_stats is not None else 0,
