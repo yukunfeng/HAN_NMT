@@ -283,7 +283,7 @@ def train_model(model, fields, optim, data_type, model_opt, train_part):
 
 	#for epoch in range(opt.start_epoch, opt.epochs + 1):
 	for epoch in range(1, opt.epochs + 1):
-		print('')
+		print(f"Start to train on {epoch}/{opt.epochs}")
 
 		# 1. Train for one epoch on the training set.
 		train_iter = None
