@@ -408,7 +408,7 @@ def build_model(model_opt, opt, fields, checkpoint):
 	if len(opt.gpuid) > 1:
 		print('Multi gpu training: ', opt.gpuid)
 		model = nn.DataParallel(model, device_ids=opt.gpuid, dim=1)
-	print(model)
+	#  print(model)
 
 	return model
 
@@ -449,7 +449,7 @@ def build_optim(model, checkpoint):
 	print(
 		"Stage 1: Keys after executing optim.set_parameters" +
 		"(model.parameters())")
-	show_optimizer_state(optim)
+	#  show_optimizer_state(optim)
 
 	if opt.train_from and opt.train_part is None: # != "context":
 		# Stage 2: In this stage, which is only performed when loading an
@@ -504,11 +504,12 @@ def main():
 								map_location=lambda storage, loc: storage)
 		
 		# I don't like reassigning attributes of opt: it's not clear.
-		if opt.train_part in ["context", "all"]:
+		#if opt.train_part in ["context", "all"]:
+		if opt.train_part in ["context", "all", "sentences"]:
 			model_opt = opt
-		else:
-			model_opt = checkpoint['opt']
-			opt.start_epoch = checkpoint['epoch'] + 1
+		#else:
+			#model_opt = checkpoint['opt']
+			#opt.start_epoch = checkpoint['epoch'] + 1
 	else:
 		checkpoint = None
 		model_opt = opt

@@ -57,7 +57,7 @@ function train_enc_inc() {
         -optim adam -adam_beta2 0.998 -decay_method noam -warmup_steps 8000 \
         -learning_rate 2 -max_grad_norm 0 -param_init 0 -param_init_glorot \
         -train_part all -context_type HAN_enc -context_size 3 \
-        -train_from $out_model \
+        -train_from $in_model \
         -start_checkpoint_at $epoch
 }
 
@@ -87,9 +87,12 @@ function translate() {
     local translate_model=$2 
     local note=$3
 
-    translate_src="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010_2013.tc.zh"
-    translate_tgt="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010_2013.tc.en"
-    translate_doc="./preprocess_TED_zh-en/zh-en-ted-extracted/IWSLT15.TED.tst2010_2013.zh-en.doc"
+    # translate_src="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010_2013.tc.zh"
+    # translate_tgt="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010_2013.tc.en"
+    # translate_doc="./preprocess_TED_zh-en/zh-en-ted-extracted/IWSLT15.TED.tst2010_2013.zh-en.doc"
+    translate_src="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010.tc.zh"
+    translate_tgt="./preprocess_TED_zh-en/zh-en-ted-preprocessed/IWSLT15.TED.tst2010.tc.en"
+    translate_doc="./preprocess_TED_zh-en/zh-en-ted-extracted/IWSLT15.TED.tst2010.zh-en.doc"
     translate_out="$(basename $translate_tgt).by.$(basename $translate_model).txt"
     bleu_script=/home/lr/yukun/OpenNMT-py/data/mosesdecoder/scripts/generic/multi-bleu.perl
 
@@ -104,7 +107,7 @@ function translate() {
     fi;
 
     perl $bleu_script $translate_tgt < $translate_out
-    epoch "above result is from $(basename $translate_model). $note"
+    echo "above result is from $(basename $translate_model). $note"
 }
 
 
@@ -113,7 +116,8 @@ data="./preprocess_TED_zh-en/converted_zh_en_ted/zh_en_ted"
 # mkdir -p $model_dir
 # model="${model_dir}/$(basename $data).sent"
 
-models=(sent.e20.pt  sent.e21.pt  sent_e22.pt  sent_e23.pt  sent_e24.pt  sent_e25.pt  sent_e26.pt)
+# models=(sent.e20.pt  sent.e21.pt  sent_e22.pt  sent_e23.pt  sent_e24.pt  sent_e25.pt  sent_e26.pt)
+models=(sent.e20.pt  sent_e24.pt  sent_e26.pt)
 for model in "${models[@]}"
 do
     model="./saved_models/${model}"
@@ -123,14 +127,22 @@ do
     translate "sent" $tmp_out "sent"
     rm $tmp_out
 
+    echo "-----------------------"
+    echo "-----------------------"
+    echo "-----------------------"
+    echo "-----------------------"
     train_enc_inc $model $tmp_out 1
     translate "non_sent" $tmp_out "enc"
 
+    echo "-----------------------"
+    echo "-----------------------"
+    echo "-----------------------"
+    echo "-----------------------"
     tmp_out_joint="${model}.joint"
     train_joint_inc $tmp_out $tmp_out_joint 1
     translate "non_sent" $tmp_out_joint "joint"
     rm $tmp_out_joint
-    python ~/env_config/sending_emails.py -c  "$0 succ: $? NMT finished;"
 done
+python ~/env_config/sending_emails.py -c  "$0 succ: $? NMT finished;"
 
 
